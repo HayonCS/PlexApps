@@ -1,0 +1,3 @@
+mutation ClearRecentMemoryMaps($userName: String!) {
+  clearRecentMemoryMaps(userName: $userName)
+}

@@ -1,0 +1,11 @@
+query GetReleasedMemoryMapInformation($memoryMapName: String!, $bomRevision: String!, $version: Int!) {
+  getReleasedMemoryMapInformation(memoryMapName: $memoryMapName, bomRevision: $bomRevision, version: $version) {
+    memoryMapName
+    bomRevision
+    version
+    ecNumber
+    logMessage
+    effectivityDate
+    dateTimeStamp
+  }
+}

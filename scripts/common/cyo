@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# DEBUG=knex:query,knex:bindings
+# PRICE_POINT_TRACING=1
+
+CLEANUP=0 NODE_ENV=test stdbuf -oL yarn test:cy 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee ~/app/cypress-ui.log

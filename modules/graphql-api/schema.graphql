@@ -1,0 +1,282 @@
+scalar Object
+scalar Decimal
+scalar UserNameOrEmployeeNumber
+scalar ADMemberResponse
+scalar SavedMemoryMapRecord
+scalar SavedMemoryMapDataRecord
+scalar SavedCommandSetDataRecord
+scalar OperationType
+scalar DataType
+scalar DirectionType
+scalar Testers
+scalar Tester
+scalar TestStation
+scalar TesterWithTestStations
+scalar PartNumbers
+scalar Commands
+scalar CommandSet
+scalar UserSettings
+scalar CommandSetDocument
+scalar DateTimeIso
+scalar JSON
+
+"""
+Log type for structured application logging. Valid values: Info, Error, Warn
+"""
+enum LogType {
+  Info
+  Error
+  Warn
+}
+
+"""
+Metadata object for application logging. Contains key-value pairs providing additional context for log entries.
+"""
+scalar AppLogMetaData
+
+"""
+Represents a Freshservice service request ticket with all associated metadata including requester info, status, priority, and custom fields.
+"""
+scalar FreshserviceServiceRequest
+"""
+Custom fields object for creating a Freshservice service request. Accepts key-value pairs like summary, details, and application_software.
+"""
+scalar FreshserviceRequestFields
+
+"""
+The SearchBy parameter used in active directory queries.
+Options Include:
+Name
+DistinguishedName
+ObjectId
+Sid
+"""
+scalar SearchByType
+
+"""
+The GroupType parameter used in active directory queries.
+Options Include:
+SecurityGroup
+DistributionList
+"""
+scalar GroupType
+
+"""
+An input type for providing either a username or an employee id.
+"""
+input UserIdWhereInput {
+  userId: String!
+}
+
+"""
+An input type for providing either a username or an employee id.
+"""
+input EmployeeNumberWhereInput {
+  employeeNumber: Int!
+}
+
+type MemoryMapDocument {
+  name: String!
+  bomRevision: String!
+  isWorkingCopy: Boolean!
+  version: Int!
+  commandset: CommandSet
+  commands: Commands!
+  testers: Testers!
+  partNumbers: PartNumbers!
+  """
+  Opaque server content token. Submit the loaded token as expectedToken when saving.
+  """
+  concurrencyToken: String!
+}
+
+"""
+A list of recent memory map objects.
+"""
+type RecentMemoryMaps {
+  recentMemoryMaps: [RecentMemoryMap!]!
+}
+
+"""
+A single recent memory map.  Users will have one or more recent memory maps
+associated with them if they have recently opened (not just modified) a memory map.
+"""
+type RecentMemoryMap {
+  memoryMapName: String!
+  bomRevision: String!
+  version: Int!
+  lastAccessed: String!
+}
+
+"""
+A type to represent a memory map that is released to production.
+"""
+type ReleasedMemoryMap {
+  memoryMapName: String!
+  bomRevision: String!
+  version: String!
+  ecNumber: String!
+  logMessage: String!
+  effectivityDate: DateTimeIso!
+  dateTimeStamp: DateTimeIso!
+}
+"""
+Freshservice Catalog name options for freshservice service requests.
+"""
+enum FreshserviceCatalogOptions {
+  Software
+  Electrical
+  Vision
+}
+
+type Query {
+  """
+  Retrieves a list of all of the available memory maps in the database.
+  """
+  getAllMemoryMaps: [SavedMemoryMapRecord]
+
+  """
+  Top level resolver for retrieving a memory map document.
+  """
+  getMemoryMap(memoryMapName: String!, bomRevision: String!, version: Int!): MemoryMapDocument
+
+  """
+  Used to retrieve an employee's picture in base64 format.
+  """
+  getEmployeePicture(employeeNumber: Int!): String!
+
+  """
+  Used to retrieve the members of a specific active directory group.
+  """
+  getActiveDirectoryGroupMembers(
+    groupName: String!
+    searchBy: SearchByType
+    groupType: GroupType
+    recursive: Boolean
+  ): [ADMemberResponse]!
+
+  """
+  Used to retrieve a list of active directory users.
+  !!!!!! NOTE: This endpoint has issues when searching by username for certain users.
+  !!!!!! e.g.) david.slater does not return a user, but dave.slater@gentex.com does.
+  !!!!!! Please default to using "getActiveDirectoryUser" when you can.
+  """
+  getActiveDirectoryUsers(searchString: String!): [ADMemberResponse]!
+
+  """
+  Used to retrieve a single active directory user.
+  """
+  getActiveDirectoryUser(searchString: String!): ADMemberResponse!
+
+  """
+  Retrieve the user settings for the given user.  Will provide default settings if no changes have been made.
+  """
+  getUserSettings(userName: String!): UserSettings!
+
+  """
+  Given a user, returns all recent memory maps that they have either viewed or modified.
+  """
+  getRecentMemoryMaps(userName: String!): RecentMemoryMaps!
+
+  """
+  Retrieve all of the commandsets available for use.
+  """
+  getAllCommandSets: [String!]!
+
+  """
+  Retrieve an individual commandset JSON document.
+  """
+  getCommandSet(name: String!, revision: Int!): CommandSetDocument!
+
+  """
+  Check whether the given memory map is the working copy.
+  """
+  isWorkingCopyMemoryMap(memoryMapName: String!, bomRevision: String!, version: Int!): Boolean
+
+  """
+  Check whether the given memory map is released to production.
+  """
+  isMemoryMapReleased(memoryMapName: String!, bomRevision: String!, version: Int!): Boolean
+
+  """
+  Retrieve information about a released memory map.
+  """
+  getReleasedMemoryMapInformation(memoryMapName: String!, bomRevision: String!, version: Int!): ReleasedMemoryMap
+
+  """
+  Gets Freshservice GTM Catalog Id based on catalog option.
+  """
+  getFreshserviceGTMCatalogId(catalog: FreshserviceCatalogOptions!): Int
+
+  """
+  Gets all of the testers registered in the memory map database.
+  """
+  getAllTesters: [Tester]
+
+  """
+  Gets all of the test stations for a given tester in the memory map database.
+  """
+  getTestStationsForTester(testerId: Int!): [TestStation]!
+
+  """
+  Gets all testers and their test stations.
+  """
+  getAllTestersAndTestStations: [TesterWithTestStations]!
+}
+
+type Mutation {
+  """
+  Atomically updates an EXISTING, unreleased working copy without changing InternalRevision.
+  document contains commands (parameters: lowLimit/value/highLimit), testers (tester/station/command: operation),
+  and partNumbers (existing part number/command/parameter: override string).
+  Loaded immutable document metadata may be supplied unchanged; it is never written.
+  Returns the canonical document and its new concurrencyToken. GraphQL error extensions.code:
+  FORBIDDEN, NOT_FOUND, MEMORY_MAP_CONFLICT, MEMORY_MAP_PROTECTED, BAD_USER_INPUT, MEMORY_MAP_UNSUPPORTED.
+  Empty commands/tester/station selections cannot be represented by the database and are rejected.
+  """
+  saveMemoryMap(
+    memoryMapName: String!
+    bomRevision: String!
+    version: Int!
+    expectedToken: String!
+    document: JSON!
+  ): MemoryMapDocument!
+
+  """
+  Saves user specific settings.
+  """
+  saveUserSettings(userName: String!, userSettings: UserSettings!): Boolean!
+
+  """
+  The mutation used to a save a new Recent Memory Map entry for a specific user.  This entry will show up on the Dashboard in the Recent Memory Maps list.
+  """
+  saveRecentMemoryMap(userName: String!, memoryMapName: String!, bomRevision: String!, version: Int!): RecentMemoryMaps!
+
+  """
+  Clears all recent memory maps for a specific user.
+  """
+  clearRecentMemoryMaps(userName: String!): Boolean!
+  """
+  Creates a new Freshservice Service Request.
+  """
+  createFreshserviceServiceRequest(
+    catalogId: Int!
+    where: UserIdWhereInput!
+    fields: FreshserviceRequestFields!
+  ): FreshserviceServiceRequest
+
+  """
+  Log a message from the client to the server console in structured format for Grafana/Loki.
+  """
+  appLogLine(logType: LogType!, category: String!, message: String!, metadata: AppLogMetaData): Boolean!
+
+  """
+  Creates a new tester in the memory map database.
+  """
+  createTester(testerName: String!, description: String!): Tester
+
+  """
+  Creates a new test station for a given tester in the memory map database.
+  """
+  createTestStation(testerName: String!, stationName: String!, description: String!): TestStation
+}

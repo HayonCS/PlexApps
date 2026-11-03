@@ -1,0 +1,25 @@
+mutation SaveMemoryMap(
+  $memoryMapName: String!
+  $bomRevision: String!
+  $version: Int!
+  $expectedToken: String!
+  $document: JSON!
+) {
+  saveMemoryMap(
+    memoryMapName: $memoryMapName
+    bomRevision: $bomRevision
+    version: $version
+    expectedToken: $expectedToken
+    document: $document
+  ) {
+    name
+    bomRevision
+    version
+    isWorkingCopy
+    concurrencyToken
+    commandset
+    commands
+    testers
+    partNumbers
+  }
+}

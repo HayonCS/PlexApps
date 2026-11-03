@@ -1,0 +1,10 @@
+query GetRecentMemoryMaps($userName: String!) {
+  getRecentMemoryMaps(userName: $userName) {
+    recentMemoryMaps {
+      memoryMapName
+      bomRevision
+      version
+      lastAccessed
+    }
+  }
+}

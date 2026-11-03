@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "LogType": {
+      "type": "string",
+      "enum": ["Info", "Error", "Warn"]
+    },
+    "AppLog": {
+      "type": "object",
+      "properties": {
+        "logType": {
+          "$ref": "#/definitions/LogType"
+        },
+        "category": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" }
+            ]
+          }
+        }
+      },
+      "required": ["logType", "category", "message"],
+      "additionalProperties": false
+    }
+  }
+}

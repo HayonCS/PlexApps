@@ -1,0 +1,279 @@
+trigger:
+  - "*"
+
+resources:
+  containers:
+    - container: compose
+      image: linuxserver/docker-compose:latest
+
+parameters:
+  - name: runBuildAndTest
+    displayName: Build Dev Container And Run Tests
+    type: boolean
+    default: true
+  - name: runJSDOMTests
+    displayName: Run JSDOM Tests (.test)
+    type: boolean
+    default: true
+  - name: runNodeTests
+    displayName: Run Node Tests (.spec)
+    type: boolean
+    default: true
+  - name: runEndToEndTests
+    displayName: Run e2e Tests (Playwright)
+    type: boolean
+    default: true
+  - name: buildAgent
+    displayName: Build And Test Agent
+    type: string
+    default: p-dockerdevops1-01
+  - name: runPushImage
+    displayName: Build And Push Deployment Image
+    type: boolean
+    default: true
+  - name: runDeployment
+    displayName: Deploy Image
+    type: boolean
+    default: true
+  - name: imageTagOverride
+    displayName: Image Name Override
+    type: string
+    default: Build.BuildNumber
+  - name: manualEnvironment
+    displayName: Manual Deployment Environment
+    type: string
+    default: auto
+    values:
+      - auto
+      - development
+      - qa
+      - production
+
+variables:
+  - group: PIPELINE-PARAMETERS
+  - ${{ if eq( variables['Build.Reason'], 'PullRequest' ) }}:
+      - name: commitId
+        value: $(System.PullRequest.SourceCommitId)
+  - ${{ if ne( variables['Build.Reason'], 'PullRequest' ) }}:
+      - name: commitId
+        value: $(Build.SourceVersion)
+  - ${{if eq(parameters.imageTagOverride, 'Build.BuildNumber')}}:
+      - name: deploymentDockerTag
+        value: $(Build.BuildNumber)
+  - ${{if ne(parameters.imageTagOverride, 'Build.BuildNumber')}}:
+      - name: deploymentDockerTag
+        value: ${{ parameters.imageTagOverride }}
+
+stages:
+  - ${{if eq(parameters.runBuildAndTest, true)}}:
+      - stage: buildAndTest
+        pool:
+          name: Container
+          demands:
+            - agent.os -equals linux
+
+        jobs:
+          - job: buildAndTest
+            displayName: Build and Test
+            timeoutInMinutes: 90
+            cancelTimeoutInMinutes: 2
+            workspace:
+              clean: all
+            pool:
+              name: Container
+              demands:
+                - agent.os -equals linux
+                - agent.name -equals ${{ parameters.buildAgent }}
+            steps:
+              - script: |
+                  docker network prune -f
+                  docker-compose -p opsmanager down --volumes
+                displayName: Docker Down
+                target:
+                  container: compose
+                env:
+                  DOCKER_CONFIG: /tmp/.docker
+                continueOnError: false
+              - script: |
+                  docker-compose -p opsmanager build --no-cache --force-rm --progress=plain
+                displayName: Docker Build
+                target:
+                  container: compose
+                env:
+                  DOCKER_CONFIG: /tmp/.docker
+              - script: |
+                  docker-compose -p opsmanager up -d
+                displayName: Docker Up
+                target:
+                  container: compose
+                env:
+                  DOCKER_CONFIG: /tmp/.docker
+              - bash: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 bash -lc '
+                    set -euo pipefail
+
+                    if [ ! -d .git ]; then
+                      git init
+                    fi
+
+                    if ! git remote get-url origin >/dev/null 2>&1; then
+                      git remote add origin https://gentex@dev.azure.com/gentex/gtm_core_software/_git/opsmanager
+                    fi
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" fetch --force --tags origin
+                    git checkout --force "$(commitId)"
+                    git reset --hard "$(commitId)"
+                  '
+                displayName: Git Clone
+              - script: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 cp .env.example .env
+                displayName: Project Initialization
+              - script: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 yarn install
+                displayName: Yarn Install
+              - script: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 yarn build
+                displayName: Yarn Build
+              - script: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 yarn setup:commandsetparser
+                displayName: Setup Python Dependencies
+              - script: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 yarn lint
+                displayName: Lint
+              - script: |
+                  docker exec -w /home/dev/app -i opsmanager_dev_1 yarn db:create:ci
+              - script: docker exec -w /home/dev/app -i opsmanager_dev_1 env PLAYWRIGHT_JUNIT_OUTPUT_NAME=TEST-e2e.xml PLAYWRIGHT_JUNIT_OUTPUT_DIR=/home/dev/app npx playwright test --reporter=line,junit
+                condition: and(succeeded(), eq('${{ parameters.runEndToEndTests }}', true))
+                displayName: End-to-End Tests
+              - script: docker cp opsmanager_dev_1:/home/dev/app/TEST-e2e.xml TEST-e2e.xml
+                condition: and(succeededOrFailed(), eq('${{ parameters.runEndToEndTests }}', true))
+                displayName: Copy End-to-End Test Results
+              - script: |
+                  set -euo pipefail
+                  if docker exec -w /home/dev/app -i opsmanager_dev_1 test -d /home/dev/app/test-results; then
+                    docker cp opsmanager_dev_1:/home/dev/app/test-results ./playwright-test-results
+                  else
+                    mkdir -p ./playwright-test-results
+                  fi
+                condition: and(succeededOrFailed(), eq('${{ parameters.runEndToEndTests }}', true))
+                displayName: Copy End-to-End Artifacts
+              - task: PublishPipelineArtifact@1
+                condition: and(succeededOrFailed(), eq('${{ parameters.runEndToEndTests }}', true))
+                displayName: Publish End-to-End Artifacts
+                inputs:
+                  targetPath: ./playwright-test-results
+                  artifact: playwright-e2e-artifacts
+              - script: docker exec -w /home/dev/app -i opsmanager_dev_1 yarn test:jsdom --mode=blob --reporter=blob --outputFile=testfiles/jsdom.blob --watch=false
+                condition: and(succeeded(), eq('${{ parameters.runJSDOMTests }}', true))
+                displayName: JSDOM Tests
+              - script: docker exec -w /home/dev/app -i opsmanager_dev_1 yarn test:node --mode=blob --reporter=blob --outputFile=testfiles/node.blob --watch=false
+                condition: and(succeeded(), eq('${{ parameters.runNodeTests }}', true))
+                displayName: Node Tests
+              - script: docker exec -w /home/dev/app -i opsmanager_dev_1 vitest --merge-reports ./testfiles/ --config vite/vitest.config.mjs --reporter=junit --outputFile=test-output.xml --watch=false
+                condition: and(succeededOrFailed(), eq('${{ parameters.runJSDOMTests }}', true))
+                displayName: Merge Test Results
+              - script: docker cp opsmanager_dev_1:/home/dev/app/test-output.xml TEST-jsdom.xml
+                condition: and(succeededOrFailed(), eq('${{ parameters.runJSDOMTests }}', true))
+                displayName: Copy Test Results
+              - script: docker-compose -p opsmanager down --volumes
+                condition: always() # this step will always run, even if the pipeline is canceled
+                displayName: Docker Cleanup
+                target:
+                  container: compose
+                env:
+                  DOCKER_CONFIG: /tmp/.docker
+                continueOnError: true
+              - task: PublishTestResults@2
+                condition: succeededOrFailed()
+                inputs:
+                  testResultsFormat: "JUnit"
+                  testResultsFiles: "**/TEST-*.xml"
+                  mergeTestResults: true
+  - ${{if eq(parameters.runPushImage, true)}}:
+      - stage: pushDockerImage
+        pool:
+          name: Container
+          demands:
+            - agent.os -equals linux
+        displayName: Build And Push Docker Image
+        condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/develop', 'refs/heads/qa', 'refs/heads/prod'), eq(variables['Build.Reason'], 'Manual')))
+        jobs:
+          - job: buildAndPushDockerProdImage
+            displayName: Docker PROD Image
+            timeoutInMinutes: 90
+            condition: or(in(variables['Build.SourceBranch'], 'refs/heads/prod'), eq('${{ parameters.manualEnvironment }}', 'production'))
+            workspace:
+              clean: all
+            steps:
+              - task: Docker@2
+                displayName: Build And Push Docker Image
+                inputs:
+                  command: buildAndPush
+                  repository: $(GPM_DOCKER_REGISTRY_NAME)/library/opsmanager
+                  dockerfile: $(Build.SourcesDirectory)/docker/deployment/prod/Dockerfile
+                  containerRegistry: $(GPM_DOCKER_SERVICE_CONNECTION_NAME)
+                  buildContext: .
+                  tags: $(deploymentDockerTag)
+          - job: buildAndPushDockerQAImage
+            displayName: Docker QA Image
+            timeoutInMinutes: 90
+            condition: or(in(variables['Build.SourceBranch'], 'refs/heads/qa'), eq('${{ parameters.manualEnvironment }}', 'qa'))
+            workspace:
+              clean: all
+            steps:
+              - task: Docker@2
+                displayName: Build And Push Docker Image
+                inputs:
+                  command: buildAndPush
+                  repository: $(GPM_DOCKER_REGISTRY_NAME)/library/opsmanager
+                  dockerfile: $(Build.SourcesDirectory)/docker/deployment/qa/Dockerfile
+                  containerRegistry: $(GPM_DOCKER_SERVICE_CONNECTION_NAME)
+                  buildContext: .
+                  tags: $(deploymentDockerTag)
+          - job: buildAndPushDockerDEVImage
+            displayName: Docker DEV Image
+            timeoutInMinutes: 90
+            condition: or(in(variables['Build.SourceBranch'], 'refs/heads/develop'), eq('${{ parameters.manualEnvironment }}', 'development'))
+            workspace:
+              clean: all
+            steps:
+              - task: Docker@2
+                displayName: Build And Push Docker Image
+                inputs:
+                  command: buildAndPush
+                  repository: $(GPM_DOCKER_REGISTRY_NAME)/library/opsmanager
+                  dockerfile: $(Build.SourcesDirectory)/docker/deployment/dev/Dockerfile
+                  containerRegistry: $(GPM_DOCKER_SERVICE_CONNECTION_NAME)
+                  buildContext: .
+                  tags: $(deploymentDockerTag)
+
+  - ${{if eq(parameters.runDeployment, true)}}:
+      - stage: deploy
+        pool:
+          name: Container
+          demands:
+            - agent.os -equals linux
+        displayName: Deploy Docker Image
+        condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/develop', 'refs/heads/qa', 'refs/heads/prod'), eq(variables['Build.Reason'], 'Manual')))
+        jobs:
+          - template: ./azure-pipelines-templates/deploy.yml
+            parameters:
+              condition: or(in(variables['Build.SourceBranch'], 'refs/heads/develop'), eq('${{ parameters.manualEnvironment }}', 'development'))
+              environment: development
+              kubernetesNamespace: gtm-core-software-dev
+              kubernetesServiceConnection: rancher-nonprod
+              dockerTag: $(deploymentDockerTag)
+          - template: ./azure-pipelines-templates/deploy.yml
+            parameters:
+              condition: or(in(variables['Build.SourceBranch'], 'refs/heads/qa'), eq('${{ parameters.manualEnvironment }}', 'qa'))
+              environment: qa
+              kubernetesNamespace: gtm-core-software-qa
+              kubernetesServiceConnection: rancher-nonprod
+              dockerTag: $(deploymentDockerTag)
+          - template: ./azure-pipelines-templates/deploy.yml
+            parameters:
+              condition: or(in(variables['Build.SourceBranch'], 'refs/heads/prod'), eq('${{ parameters.manualEnvironment }}', 'production'))
+              environment: production
+              kubernetesNamespace: gtm-core-software-prod
+              kubernetesServiceConnection: rancher-prod2
+              dockerTag: $(deploymentDockerTag)

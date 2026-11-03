@@ -1,0 +1,2 @@
+kill -9 `ps ax | grep -i Cypress | sed -E "s/^\ +//" | cut -f1 -d\ `
+

@@ -1,0 +1,3 @@
+query GetEmployeePicture($employeeNumber: Int!) {
+  getEmployeePicture(employeeNumber: $employeeNumber)
+}

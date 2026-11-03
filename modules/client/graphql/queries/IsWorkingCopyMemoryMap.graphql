@@ -1,0 +1,3 @@
+query IsWorkingCopyMemoryMap($memoryMapName: String!, $bomRevision: String!, $version: Int!) {
+  isWorkingCopyMemoryMap(memoryMapName: $memoryMapName, bomRevision: $bomRevision, version: $version)
+}

@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "modules/",
+    "jsx": "react",
+    "lib": ["dom", "es6", "es2015", "es2016", "es2017", "es2018"],
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "removeComments": true,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "noEmit": true,
+    "useUnknownInCatchVariables": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "modules/*": ["./*"],
+      "client/*": ["./client/*"],
+      "server": ["/server"],
+      "server/*": ["./server/*"],
+      "atomic-object/*": ["../modules/atomic-object/*"],
+      "context": ["../modules/context"],
+      "graphql-api": ["../modules/graphql-api"],
+      "graphql-api/*": ["../modules/graphql-api/*"],
+      "helpers/*": ["modules/helpers/*"],
+      "node-environment": ["../modules/node-environment"],
+      "rest-endpoints/*": ["../modules/rest-endpoints/*"],
+      "domain-services/*": ["../modules/domain-services/*"],
+      "core/*": ["./modules/core/*"],
+      "records": ["modules/records"],
+      "records/*": ["modules/records/*"],
+      "context/*": ["modules/context/*"],
+      "db/*": ["../modules/db/*"],
+      "db": ["../modules/db"]
+    }
+  },
+  "exclude": ["./dist", "./es", "**/*-type-test.ts", "./cypress_dev"]
+}

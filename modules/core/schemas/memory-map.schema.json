@@ -1,0 +1,151 @@
+{
+  "title": "MemoryMapDocument",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": "integer" },
+    "bomRevision": { "type": "string" },
+    "isWorkingCopy": { "type": "boolean" },
+    "concurrencyToken": { "type": "string" },
+    "commandset": { "oneOf": [{ "$ref": "#/definitions/commandset" }, { "type": "null" }] },
+    "commands": { "$ref": "#/definitions/commands" },
+    "testers": { "$ref": "#/definitions/testers" },
+
+    "partNumbers": { "$ref": "#/definitions/partNumbers" }
+  },
+  "required": ["name", "version", "bomRevision", "commandset", "commands", "isWorkingCopy"],
+  "additionalProperties": false,
+  "definitions": {
+    "MemoryMapCommand": {
+      "type": "object",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "parameters": { "$ref": "#/definitions/parameters" }
+          },
+          "required": ["parameters"]
+        }
+      ]
+    },
+    "MemoryMapCommandParameter": {
+      "type": "object",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "lowLimit": { "type": "string" },
+            "value": { "type": "string" },
+            "highLimit": { "type": "string" },
+            "defaultLowLimit": { "type": "string" },
+            "defaultValue": { "type": "string" },
+            "defaultHighLimit": { "type": "string" },
+            "datatype": { "type": "string", "tsType": "CommandSetDataDataType" },
+            "direction": { "type": "string", "tsType": "DirectionTypeString" }
+          },
+          "required": [
+            "lowLimit",
+            "value",
+            "highLimit",
+            "defaultLowLimit",
+            "defaultValue",
+            "defaultHighLimit",
+            "datatype",
+            "direction"
+          ]
+        }
+      ]
+    },
+    "MemoryMapStationOperation": {
+      "type": ["object"],
+      "properties": {
+        "operationName": { "type": "string" }
+      }
+    },
+    "MemoryMapTester": {
+      "type": ["object"],
+
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/MemoryMapStationOperation"
+          }
+        ]
+      }
+    },
+    "PartNumberValueOverride": {
+      "type": ["string"]
+    },
+    "PartNumberOverride": {
+      "type": ["object"],
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/PartNumberValueOverride"
+          }
+        ]
+      }
+    },
+    "MemoryMapPartNumber": {
+      "type": ["object"],
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/PartNumberOverride"
+          }
+        ]
+      }
+    },
+    "partNumbers": {
+      "type": ["object"],
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/MemoryMapPartNumber"
+          }
+        ]
+      }
+    },
+    "testers": {
+      "type": ["object"],
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/MemoryMapTester"
+          }
+        ]
+      }
+    },
+    "commandset": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "fileName": { "type": "string" },
+        "revision": { "type": "integer" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["name", "fileName", "revision", "description"]
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/MemoryMapCommand"
+          }
+        ]
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/MemoryMapCommandParameter"
+          }
+        ]
+      }
+    }
+  }
+}

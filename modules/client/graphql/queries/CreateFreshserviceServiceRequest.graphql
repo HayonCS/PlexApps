@@ -1,0 +1,11 @@
+mutation CreateFreshserviceServiceRequest(
+  $catalogId: Int!
+  $where: UserIdWhereInput!
+  $fields: FreshserviceRequestFields!
+) {
+  createFreshserviceServiceRequest(
+    catalogId: $catalogId
+    where: $where
+    fields: $fields
+  )
+}

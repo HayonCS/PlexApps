@@ -1,0 +1,3 @@
+mutation SaveUserSettings($userName: String!, $userSettings: UserSettings!) {
+  saveUserSettings(userName: $userName, userSettings: $userSettings)
+}

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# DEBUG=knex:query,knex:bindings
+
+if [[ -z "$1" ]]; then
+  CLEANUP=0 NODE_ENV=test stdbuf -oL yarn test:cy:headless 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee ~/app/cypress-all.log
+else
+  CLEANUP=0 NODE_ENV=test stdbuf -oL yarn test:cy:headless 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee ~/app/cypress.log
+fi;

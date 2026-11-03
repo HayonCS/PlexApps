@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# DEBUG=knex:query,knex:bindings
+
+if [[ -z "$1" ]]; then
+  NODE_ENV=test stdbuf -oL jest --forceExit 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee ~/app/test-all.log
+  NODE_ENV=test stdbuf -oL jest --forceExit --config=jest.config.node.js $* 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee -a ~/app/test-all.log
+else
+  if [[ "$1" == *"spec"* ]]; then
+    echo 🔹 Using node
+    NODE_ENV=test stdbuf -oL jest --config=jest.config.node.js $* 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee ~/app/test.log
+  else
+    echo 🔹 Using jsdom
+    NODE_ENV=test stdbuf -oL jest --forceExit $* 2>&1 | ts "[%Y-%m-%d %H:%M:%S] " | stdbuf -o0 sed -E "s/.\[[0-9]{0,2}m//g" | tee ~/app/test.log
+  fi;
+fi;
+
