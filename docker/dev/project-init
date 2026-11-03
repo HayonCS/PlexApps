@@ -4,7 +4,7 @@ set -e
 DIR=/home/dev/app
 
 # Checkout the repository
-[ ! -d "${DIR}/.git" ] && echo "Cloning git repository..." && git clone git@ssh.dev.azure.com:v3/gentex/gtm_core_software/opsmanager .
+[ ! -d "${DIR}/.git" ] && echo "Cloning git repository..." && git clone git@github.com:HayonCS/PlexApps.git .
 
 cd $DIR
 
