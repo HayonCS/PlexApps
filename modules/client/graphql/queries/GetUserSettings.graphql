@@ -1,3 +1,0 @@
-query GetUserSettings($userName: String!) {
-  getUserSettings(userName: $userName)
-}

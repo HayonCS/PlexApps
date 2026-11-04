@@ -1,3 +1,0 @@
-query GetCommandSet($name: String!, $revision: Int!) {
-  getCommandSet(name: $name, revision: $revision)
-}

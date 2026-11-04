@@ -1,1 +1,0 @@
-sudo tcpdump -vvvvvv 2>&1 | tee ~/app/tcpdump.log

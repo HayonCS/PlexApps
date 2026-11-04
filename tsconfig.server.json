@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["dom", "es6", "es2015", "esnext.asynciterable"],
-    "downlevelIteration": true
-  }
-}

@@ -1,3 +1,0 @@
-mutation CreateTestStation($testerName: String!, $stationName: String!, $description: String!) {
-  createTestStation(testerName: $testerName, stationName: $stationName, description: $description)
-}

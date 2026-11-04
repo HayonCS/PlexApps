@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["dom", "es2018", "esnext.asynciterable"],
-    "module": "ES2022",
-    "target": "es2018",
-    "types": ["vite/client"]
-  }
-}

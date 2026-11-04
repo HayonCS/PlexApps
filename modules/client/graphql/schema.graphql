@@ -1,6 +1,0 @@
-scalar IsoDate
-scalar IsoTime
-
-type Query {
-  localDate: IsoDate!
-}

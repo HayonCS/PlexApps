@@ -1,3 +1,0 @@
-query GetActiveDirectoryGroupMembers($groupName: String!) {
-  getActiveDirectoryGroupMembers(groupName: $groupName)
-}

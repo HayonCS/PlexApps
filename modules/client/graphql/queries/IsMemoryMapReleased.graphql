@@ -1,3 +1,0 @@
-query IsMemoryMapReleased($memoryMapName: String!, $bomRevision: String!, $version: Int!) {
-  isMemoryMapReleased(memoryMapName: $memoryMapName, bomRevision: $bomRevision, version: $version)
-}

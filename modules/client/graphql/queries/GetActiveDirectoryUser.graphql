@@ -1,3 +1,0 @@
-query GetActiveDirectoryUser($searchString: String!) {
-  getActiveDirectoryUser(searchString: $searchString)
-}

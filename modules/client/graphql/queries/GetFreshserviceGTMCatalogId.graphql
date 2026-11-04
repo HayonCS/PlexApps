@@ -1,3 +1,0 @@
-query GetFreshserviceGTMCatalogId($catalog: FreshserviceCatalogOptions!) {
-  getFreshserviceGTMCatalogId(catalog: $catalog)
-}

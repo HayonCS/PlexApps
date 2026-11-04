@@ -1,3 +1,0 @@
-mutation CreateTester($testerName: String!, $description: String!) {
-  createTester(testerName: $testerName, description: $description)
-}
