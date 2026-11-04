@@ -36,6 +36,7 @@
         height: -moz-available;          /* Firefox */
         height: -webkit-fill-available;  /* Safari & Older Chrome */
         height: stretch;                 /* Chromium 138+, WebKit modern */
+        max-height: none;
     }
     .card-item-content {
         display: flex;
@@ -44,6 +45,15 @@
         text-align: start;
     }
 </style>
+
+@if (_isMobile)
+{
+    <style>
+        .card-item-button {
+            max-height: 260px
+        }
+    </style>
+}
 
 <PageTitle>Admin Apps for Plex</PageTitle>
 
@@ -178,7 +188,7 @@
     [Inject] IJSRuntime JSRuntime { get; set; } = default!;
 
     private int _iconSize = 170;
-    private int _gridItemSize = 1;
+    private int _gridItemSize = 6;
 
     private int _width = 0;
     private bool _isMobile = false;
