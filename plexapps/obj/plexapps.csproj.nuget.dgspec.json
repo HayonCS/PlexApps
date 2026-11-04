@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\dev\\plexapps\\plexapps\\plexapps.csproj": {}
+    "C:\\dev\\PlexApps\\plexapps\\plexapps.csproj": {}
   },
   "projects": {
-    "C:\\dev\\plexapps\\plexapps.Client\\plexapps.Client.csproj": {
+    "C:\\dev\\PlexApps\\plexapps.Client\\plexapps.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\dev\\plexapps\\plexapps.Client\\plexapps.Client.csproj",
+        "projectUniqueName": "C:\\dev\\PlexApps\\plexapps.Client\\plexapps.Client.csproj",
         "projectName": "plexapps.Client",
-        "projectPath": "C:\\dev\\plexapps\\plexapps.Client\\plexapps.Client.csproj",
-        "packagesPath": "C:\\Users\\noah.krueger\\.nuget\\packages\\",
-        "outputPath": "C:\\dev\\plexapps\\plexapps.Client\\obj\\",
+        "projectPath": "C:\\dev\\PlexApps\\plexapps.Client\\plexapps.Client.csproj",
+        "packagesPath": "C:\\Users\\Noah\\.nuget\\packages\\",
+        "outputPath": "C:\\dev\\PlexApps\\plexapps.Client\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\noah.krueger\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Noah\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +39,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
@@ -55,7 +49,7 @@
             "Microsoft.AspNetCore.App.Internal.Assets": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.9, )",
+              "version": "[10.0.14, )",
               "autoReferenced": true
             },
             "Microsoft.AspNetCore.Components.WebAssembly": {
@@ -65,13 +59,13 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.9, )",
+              "version": "[10.0.14, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.9, )",
+              "version": "[10.0.14, )",
               "autoReferenced": true
             },
             "MudBlazor": {
@@ -93,7 +87,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[10.0.9, 10.0.9]"
+              "version": "[10.0.14, 10.0.14]"
             }
           ],
           "frameworkReferences": {
@@ -101,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.403/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -384,28 +378,22 @@
         }
       }
     },
-    "C:\\dev\\plexapps\\plexapps\\plexapps.csproj": {
+    "C:\\dev\\PlexApps\\plexapps\\plexapps.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\dev\\plexapps\\plexapps\\plexapps.csproj",
+        "projectUniqueName": "C:\\dev\\PlexApps\\plexapps\\plexapps.csproj",
         "projectName": "plexapps",
-        "projectPath": "C:\\dev\\plexapps\\plexapps\\plexapps.csproj",
-        "packagesPath": "C:\\Users\\noah.krueger\\.nuget\\packages\\",
-        "outputPath": "C:\\dev\\plexapps\\plexapps\\obj\\",
+        "projectPath": "C:\\dev\\PlexApps\\plexapps\\plexapps.csproj",
+        "packagesPath": "C:\\Users\\Noah\\.nuget\\packages\\",
+        "outputPath": "C:\\dev\\PlexApps\\plexapps\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\noah.krueger\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Noah\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -413,8 +401,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\dev\\plexapps\\plexapps.Client\\plexapps.Client.csproj": {
-                "projectPath": "C:\\dev\\plexapps\\plexapps.Client\\plexapps.Client.csproj"
+              "C:\\dev\\PlexApps\\plexapps.Client\\plexapps.Client.csproj": {
+                "projectPath": "C:\\dev\\PlexApps\\plexapps.Client\\plexapps.Client.csproj"
               }
             }
           }
@@ -429,7 +417,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
@@ -439,7 +427,7 @@
             "Microsoft.AspNetCore.App.Internal.Assets": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.9, )",
+              "version": "[10.0.14, )",
               "autoReferenced": true
             },
             "Microsoft.AspNetCore.Components.WebAssembly.Server": {
@@ -466,7 +454,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.403/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

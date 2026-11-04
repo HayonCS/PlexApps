@@ -21,14 +21,15 @@
     <script src="@Assets["_content/MudBlazor/MudBlazor.min.js"]"></script>
 
     <script>
-        window.getWindowWidth = () => {
-            return window.innerWidth;
-        };
-        
-        window.registerResizeCallback = (dotNetHelper) => {
-            window.addEventListener("resize", () => {
-                dotNetHelper.invokeMethodAsync("OnBrowserResize", window.innerWidth);
-            });
+        window.browserResize = {
+            registerResizeCallback: function (dotNetHelper) {
+                window.addEventListener('resize', () => {
+                    dotNetHelper.invokeMethodAsync('OnBrowserResize', window.innerWidth);
+                });
+            },
+            getWidth: function () {
+                return window.innerWidth;
+            }
         };
     </script>
 </body>

@@ -2,11 +2,11 @@
 
 <style>
     .card-item {
-        background-color: transparent;
+        /* background-color: transparent;
         transition: background-color 0.2s linear, scale 0.2s linear;
         border-radius: 8px;
         width: 250px !important;
-        height: fit-content;
+        height: fit-content; */
     }
     .card-item:hover {
     /*    color: rgba(0, 110, 255, 0.3); */
@@ -18,238 +18,193 @@
         width: fit-content !important;
         height: fit-content;
     }
+
+    .card-item-card {
+        width: 210px;
+        background-color: transparent;
+        box-shadow: none;
+    }
+    .card-item-button {
+        padding: 0;
+        border-radius: 8px;
+        align-items: start;
+
+        width: -moz-available;          /* Firefox */
+        width: -webkit-fill-available;  /* Safari & Older Chrome */
+        width: stretch;                 /* Chromium 138+, WebKit modern */
+
+        height: -moz-available;          /* Firefox */
+        height: -webkit-fill-available;  /* Safari & Older Chrome */
+        height: stretch;                 /* Chromium 138+, WebKit modern */
+    }
+    .card-item-content {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        text-align: start;
+    }
 </style>
 
 <PageTitle>Admin Apps for Plex</PageTitle>
 
-<div style="padding: 16px 8px;">
-    @if (!_isMobile)
-    {
-        <MudGrid Justify="Justify.FlexStart" Style="padding: 14px 14px 14px 4px;">
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenPlex">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/plex.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+<div style="margin-top: 16px;">
+    <MudGrid Justify="Justify.FlexStart">
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlPlex">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/plex.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Plex")</MudText>
-                        <MudText Typo="Typo.body2">@("Plex media server platform.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Plex media server platform.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenTautulli">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/tautulli.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlTautulli">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/tautulli.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Tautulli")</MudText>
-                        <MudText Typo="Typo.body2">@("Analytics and Statistics for Plex.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Analytics and Statistics for Plex.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenSeerr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/seerr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlSeerr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/seerr.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Seerr")</MudText>
-                        <MudText Typo="Typo.body2">@("Media discovery and management for Radarr and Sonarr.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Media discovery and management for Radarr and Sonarr.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenRadarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/radarr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlRadarr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/radarr-light.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Radarr")</MudText>
-                        <MudText Typo="Typo.body2">@("Movie collection manager.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Movie collection manager.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenSonarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/sonarr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlSonarr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/sonarr.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Sonarr")</MudText>
-                        <MudText Typo="Typo.body2">@("TV Show collection manager.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("TV Show collection manager.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenProwlarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/prowlarr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlProwlarr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/prowlarr.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Prowlarr")</MudText>
-                        <MudText Typo="Typo.body2">@("Indexer manager for Radarr and Sonarr.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Indexer manager for Radarr and Sonarr.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenBazarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/bazarr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlBazarr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/bazarr-light.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Bazarr")</MudText>
-                        <MudText Typo="Typo.body2">@("Subtitle manager for Radarr and Sonarr.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Subtitle manager for Radarr and Sonarr.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenAgregarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/agregarr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlAgregarr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/agregarr.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Agregarr")</MudText>
-                        <MudText Typo="Typo.body2">@("Plex collections manager.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Plex collections manager.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenTunarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/tunarr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlTunarr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/tunarr.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("Tunarr")</MudText>
-                        <MudText Typo="Typo.body2">@("IPTV manager. Create/manage lives TV channels.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("IPTV manager. Create/manage lives TV channels.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenCleanUpArr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/cleanuparr.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlCleanuparr">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/cleanuparr.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
                         <MudText Typo="Typo.h6">@("CleanUpArr")</MudText>
-                        <MudText Typo="Typo.body2">@("Download and queue management for Radarr and Sonarr.")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Download and queue management for Radarr and Sonarr.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 250px; height: 340px; padding: 0; margin: 8px; cursor: pointer;" @onclick="OpenULDAS">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/uldas.png" Height="200" Style="width: 200px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("ULDAS")</MudText>
-                        <MudText Typo="Typo.body2">@("Undefined Language Detector for Audio and Subtitles.")</MudText>
+            </MudButton>
+        </MudItem>
+        <MudItem Class="card-item" Style="" xs="_gridItemSize">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlULDAS">
+                <MudCard Class="card-item-card">
+                    <MudCardMedia Image="images/uldas.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                    <MudCardContent Class="card-item-content">
+                       <MudText Typo="Typo.h6">@("ULDAS")</MudText>
+                        <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Undefined Language Detector for Audio and Subtitles.")</MudText>
                     </MudCardContent>
                 </MudCard>
-            </MudItem>
-        </MudGrid>
-    }
-    else
-    {
-        <MudGrid Justify="Justify.FlexStart" Style="padding: 14px 14px 14px 4px;">
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenPlex">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/plex.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Plex")</MudText>
-                        <MudText Typo="Typo.caption">@("Plex media server platform.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenTautulli">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/tautulli.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Tautulli")</MudText>
-                        <MudText Typo="Typo.caption">@("Analytics and Statistics for Plex.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenSeerr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/seerr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Seerr")</MudText>
-                        <MudText Typo="Typo.caption">@("Media discovery and management for Radarr and Sonarr.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenRadarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/radarr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Radarr")</MudText>
-                        <MudText Typo="Typo.caption">@("Movie collection manager.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenSonarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/sonarr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Sonarr")</MudText>
-                        <MudText Typo="Typo.caption">@("TV Show collection manager.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenProwlarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/prowlarr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Prowlarr")</MudText>
-                        <MudText Typo="Typo.caption">@("Indexer manager for Radarr and Sonarr.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenBazarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/bazarr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Bazarr")</MudText>
-                        <MudText Typo="Typo.caption">@("Subtitle manager for Radarr and Sonarr.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenAgregarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/agregarr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Agregarr")</MudText>
-                        <MudText Typo="Typo.caption">@("Plex collections manager.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenTunarr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/tunarr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("Tunarr")</MudText>
-                        <MudText Typo="Typo.caption">@("IPTV manager. Create/manage lives TV channels.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenCleanUpArr">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/cleanuparr.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("CleanUpArr")</MudText>
-                        <MudText Typo="Typo.caption">@("Download and queue management for Radarr and Sonarr.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem Class="card-item" Style="width: 180px !important; height: 290px; padding: 0; margin: 4px; cursor: pointer;" @onclick="OpenULDAS">
-                <MudCard Style="height: stretch;">
-                    <MudCardMedia Image="images/uldas.png" Height="140" Style="width: 140px; align-self: center; margin-top: 16px;" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h6">@("ULDAS")</MudText>
-                        <MudText Typo="Typo.caption">@("Undefined Language Detector for Audio and Subtitles.")</MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-    }
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 </div>
 
 @code{
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
     [Inject] IJSRuntime JSRuntime { get; set; } = default!;
 
+    private int _iconSize = 170;
+    private int _gridItemSize = 1;
+
     private int _width = 0;
     private bool _isMobile = false;
+    private string _appSize = "lg";
     private DotNetObjectReference<Home>? objRef;
+
+    private string _urlPlex = "https://plex.hayon.org/";
+    private string _urlTautulli = "https://tautulli.hayon.org/";
+    private string _urlSeerr = "https://seerr.hayon.org/";
+    private string _urlRadarr = "https://radarr.hayon.org/";
+    private string _urlSonarr = "https://sonarr.hayon.org/";
+    private string _urlProwlarr = "https://prowlarr.hayon.org/";
+    private string _urlBazarr = "https://bazarr.hayon.org/";
+    private string _urlAgregarr = "https://agregarr.hayon.org/";
+    private string _urlTunarr = "https://tunarr.hayon.org/";
+    private string _urlCleanuparr = "https://cleanuparr.hayon.org/";
+    private string _urlULDAS = "https://uldas.hayon.org/";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            @* _width = await JSRuntime.InvokeAsync<int>("getWindowWidth"); *@
-            _width = await JSRuntime.InvokeAsync<int>("eval", "window.innerWidth");
-            _isMobile = _width <= 800;
+            _width = await JSRuntime.InvokeAsync<int>("browserResize.getWidth");
+            DetermineAppSize(_width);
             objRef = DotNetObjectReference.Create(this);
-            await JSRuntime.InvokeVoidAsync("registerResizeCallback", objRef);
+            await JSRuntime.InvokeVoidAsync("browserResize.registerResizeCallback", objRef);
             StateHasChanged();
         }
     }
@@ -257,8 +212,7 @@
     [JSInvokable]
     public void OnBrowserResize(int width)
     {
-        _width = width;
-        _isMobile = _width <= 800;
+        DetermineAppSize(width);
         StateHasChanged();
     }
 
@@ -267,23 +221,50 @@
         objRef?.Dispose();
     }
 
-    void OpenPlex(MouseEventArgs e) => OnClickNavigation(e, "https://plex.hayon.org/");
-    void OpenTautulli(MouseEventArgs e) => OnClickNavigation(e, "https://tautulli.hayon.org/");
-    void OpenSeerr(MouseEventArgs e) => OnClickNavigation(e, "https://seerr.hayon.org/");
-    void OpenRadarr(MouseEventArgs e) => OnClickNavigation(e, "https://radarr.hayon.org/");
-    void OpenSonarr(MouseEventArgs e) => OnClickNavigation(e, "https://sonarr.hayon.org/");
-    void OpenProwlarr(MouseEventArgs e) => OnClickNavigation(e, "https://prowlarr.hayon.org/");
-    void OpenBazarr(MouseEventArgs e) => OnClickNavigation(e, "https://bazarr.hayon.org/");
-    void OpenAgregarr(MouseEventArgs e) => OnClickNavigation(e, "https://agregarr.hayon.org/");
-    void OpenTunarr(MouseEventArgs e) => OnClickNavigation(e, "https://tunarr.hayon.org/");
-    void OpenCleanUpArr(MouseEventArgs e) => OnClickNavigation(e, "https://cleanuparr.hayon.org/");
-    void OpenULDAS(MouseEventArgs e) => OnClickNavigation(e, "https://uldas.hayon.org/");
-
-    void OnClickNavigation(MouseEventArgs e, string url)
+    private void DetermineAppSize(int width)
     {
-        if (e.CtrlKey || e.MetaKey || e.Button == 1 || e.Buttons == 4)
-            JSRuntime.InvokeVoidAsync("open", url, "_blank");
+        _width = width;
+        _isMobile = _width < 960;
+
+        if (_isMobile)
+            _iconSize = 120;
         else
-            NavigationManager.NavigateTo(url);
+            _iconSize = 170;
+
+        if (width < 550)
+        {
+            _appSize = "xxs";
+            _gridItemSize = 6;
+        }
+        else if (width < 700)
+        {
+            _appSize = "xs";
+            _gridItemSize = 4;
+        }
+        else if (width < 960)
+        {
+            _appSize = "sm";
+            _gridItemSize = 3;
+        }
+        else if (width < 1150)
+        {
+            _appSize = "md";
+            _gridItemSize = 4;
+        }
+        else if (width < 1600)
+        {
+            _appSize = "lg";
+            _gridItemSize = 3;
+        }
+        else if (width < 2900)
+        {
+            _appSize = "xl";
+            _gridItemSize = 2;
+        }
+        else
+        {
+            _appSize = "xxl";
+            _gridItemSize = 1;
+        }
     }
 }
