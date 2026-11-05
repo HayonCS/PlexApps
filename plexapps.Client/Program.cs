@@ -5,4 +5,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddMudServices();
 
+builder.Services.AddScoped<ThemeService>();
+
 await builder.Build().RunAsync();
