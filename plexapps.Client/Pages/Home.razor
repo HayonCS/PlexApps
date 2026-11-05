@@ -90,7 +90,7 @@
 }
 else
 {
-    <div style="margin-top: 16px;">
+    <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 32px;">
         <MudGrid Justify="Justify.FlexStart">
             <MudItem Class="card-item" Style="" xs="_gridItemSize">
                 <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlPlex">
@@ -214,6 +214,22 @@ else
                 </MudButton>
             </MudItem>
         </MudGrid>
+
+        <MudDivider />
+
+        <MudGrid Justify="Justify.FlexStart">
+            <MudItem Class="card-item" Style="" xs="_gridItemSize">
+                <MudButton Variant="Variant.Filled" Color="Color.Default" Class="card-item-button" Href="@_urlDWService">
+                    <MudCard Class="card-item-card">
+                        <MudCardMedia Image="images/dwservice-light.png" Height="_iconSize" Style="@($"width: {_iconSize}px; align-self: center; margin: 16px 16px 0;")" />
+                        <MudCardContent Class="card-item-content">
+                            <MudText Typo="Typo.h6">@("DWService")</MudText>
+                            <MudText Typo="@(_isMobile ? Typo.caption : Typo.body2)">@("Remote access to the Plex server machine.")</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudButton>
+            </MudItem>
+        </MudGrid>
     </div>    
 }
 
@@ -242,6 +258,8 @@ else
     private string _urlTunarr = "https://tunarr.hayon.org/";
     private string _urlCleanuparr = "https://cleanuparr.hayon.org/";
     private string _urlULDAS = "https://uldas.hayon.org/";
+
+    private string _urlDWService = "https://www.dwservice.net/t67nef1q627a9ekpq555iglzm5s926shs0apo4pu.dlk";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
